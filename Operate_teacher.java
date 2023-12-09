@@ -1,0 +1,98 @@
+package CollegeManagement;
+
+import java.util.Scanner;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+public class Operate_teacher {
+
+	public void add() {
+		System.out.println("Enter id of Teacher ");
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+		System.out.println("Enter name of Teacher ");
+		sc.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+		String name = sc.nextLine();
+		
+		System.out.println("Enter adress of Teacher ");
+		String address = sc.nextLine();
+
+		Configuration cfg = new Configuration();
+		cfg.configure("CollegeManagement/hibernate.cfg.xml");
+		SessionFactory factory = cfg.buildSessionFactory();
+
+		Session session = factory.openSession();
+		Teacher t1 = new Teacher();
+		t1.setTid(id);
+		t1.setTname(name);
+		t1.setTlocation(address);
+
+		Transaction tx = session.beginTransaction();
+		session.persist(t1);
+		tx.commit();
+		factory.close();
+		session.close();
+	}
+
+	public void update() {
+		Configuration cfg = new Configuration();
+		cfg.configure("CollegeManagement/hibernate.cfg.xml");
+		SessionFactory factory = cfg.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		System.out.println("Enter id of Teacher ");
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+		System.out.println("Enter name of Teacher ");
+		sc.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+		String name = sc.nextLine();
+
+		Teacher t1 = (Teacher) session.get(Teacher.class, id);
+		t1.setTname(name);
+		session.update(t1);
+		tx.commit();
+		session.close();
+		factory.close();
+
+	}
+
+	public void delete() {
+		Configuration cfg = new Configuration();
+		cfg.configure("CollegeManagement/hibernate.cfg.xml");
+		SessionFactory factory = cfg.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
+
+		System.out.println("Enter id of Teacher ");
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+		Teacher t1 = (Teacher) session.get(Teacher.class, id);
+		session.delete(t1);
+		tx.commit();
+		session.close();
+		factory.close();
+	}
+
+	public void show() {
+
+		System.out.println("project is starting..");
+
+		Configuration cfg = new Configuration();
+		cfg.configure("CollegeManagement/hibernate.cfg.xml");
+		SessionFactory factory = cfg.buildSessionFactory();
+		Session session = factory.openSession();
+		System.out.println("Enter id of Teacher ");
+		Scanner sc = new Scanner(System.in);
+		int id = sc.nextInt();
+		Teacher s1 = (Teacher) session.get(Teacher.class, id);
+
+		System.out.println(s1);
+		factory.close();
+		session.close();
+
+	}
+}
